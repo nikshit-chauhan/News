@@ -10,7 +10,7 @@ class NewsApiProvider  implements Source{
 
   @override
   Future<List<int>> fetchTopIds() async {
-    var url = Uri.parse('$_root/topstories.json');
+    var url = Uri.parse('$_root/v0/topstories.json');
     final response = await client.get(url);
     final ids = json.decode(response.body);
 
@@ -18,7 +18,7 @@ class NewsApiProvider  implements Source{
   }
   @override
   Future<ItemModel> fetchItem(int id) async{
-    var url = Uri.parse('$_root/item/$id.json');
+    var url = Uri.parse('$_root/v0/item/$id.json');
     final response = await client.get(url);
     final parsedJson = json.decode(response.body);
 
