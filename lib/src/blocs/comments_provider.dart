@@ -4,6 +4,7 @@ export 'comments_bloc.dart';
 
 class CommentsProvider extends InheritedWidget {
   final CommentsBloc bloc;
+
   CommentsProvider ({key, required Widget child})
   : bloc = CommentsBloc(),
   super(key: key, child: child);
@@ -11,7 +12,8 @@ class CommentsProvider extends InheritedWidget {
   @override
   bool updateShouldNotify(_) => true;
 
-  CommentsBloc of (BuildContext context){
-    return (context.dependOnInheritedWidgetOfExactType<CommentsProvider>() as CommentsProvider).bloc;
+  static CommentsBloc of (BuildContext context){
+    return (context.dependOnInheritedWidgetOfExactType<CommentsProvider>()
+    as CommentsProvider).bloc;
   }
 }
