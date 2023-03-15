@@ -1,3 +1,4 @@
+import 'package:news/src/models/item_model.dart';
 import 'package:news/src/resources/news_api_provider.dart';
 import 'dart:convert';
 import 'package:test/test.dart';
@@ -17,11 +18,15 @@ void main(){
   test('FetchItems return a item', () async{
     final newsApi = NewsApiProvider();
     newsApi.client = MockClient((request) async{
-      final jsonMap = {'id': 123};
+      final jsonMap = {'id': 8863, 'title': 'foo', 'text': 'bar'};
       return Response(json.encode(jsonMap), 200);
     });
-    final item = await newsApi.fetchItem(999);
+    final item = await newsApi.fetchItem(8863);
 
-    expect(item.id, 123);
+    expect(item, isA<ItemModel>());
+
+    expect(item.id, 8863);
+    expect(item.title, 'foo');
+    expect(item.text, 'bar');
   });
 }

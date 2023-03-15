@@ -9,39 +9,39 @@ class StoriesBloc {
   final _itemsFetcher = PublishSubject<int>();
 
   //Getters to get Streams
-   Stream<List<int>> get topIds => _topIds.stream;
-   Stream<Map<int, Future<ItemModel>>> get items => _itemsOutput.stream;
+  Stream<List<int>> get topIds => _topIds.stream;
+  Stream<Map<int, Future<ItemModel>>> get items => _itemsOutput.stream;
 
-   //Getters to sink
+  //Getters to sink
   Function(int) get fetchItem => _itemsFetcher.sink.add;
 
   //Constructor for initialising single transformer for whole app
-  StoriesBloc(){
+  StoriesBloc() {
     _itemsFetcher.stream.transform(_itemsTransformer()).pipe(_itemsOutput);
   }
 
-   fetchTopIds() async{
-     final ids = await _repository.fetchTopIds();
-     _topIds.sink.add(ids);
-   }
+  fetchTopIds() async {
+    final ids = await _repository.fetchTopIds();
+    _topIds.sink.add(ids);
+  }
 
-   clearCache(){
+  clearCache() {
     return _repository.clearCache();
-   }
+  }
 
-   _itemsTransformer(){
-     return ScanStreamTransformer(
-         (Map<int, Future<ItemModel>> cache, int id, _){
-           cache[id] = _repository.fetchItem(id) as Future<ItemModel>;
-           return cache;
-         },
-       <int, Future<ItemModel>>{},
-     );
-   }
+  _itemsTransformer() {
+    return ScanStreamTransformer(
+      (Map<int, Future<ItemModel>> cache, int id, _) {
+        cache[id] = _repository.fetchItem(id) as Future<ItemModel>;
+        return cache;
+      },
+      <int, Future<ItemModel>>{},
+    );
+  }
 
-   dispose(){
-     _topIds.close();
-     _itemsFetcher.close();
-     _itemsOutput.close();
-   }
+  dispose() {
+    _topIds.close();
+    _itemsFetcher.close();
+    _itemsOutput.close();
+  }
 }
