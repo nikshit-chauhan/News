@@ -16,8 +16,10 @@ class NewsListTile extends StatelessWidget {
       stream: bloc.items,
       builder: (BuildContext context,
           AsyncSnapshot<Map<int, Future<ItemModel>>> snapshot) {
-        if (!snapshot.hasData) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return const LoadingContainer();
+        } else if (!snapshot.hasData) {
+          return const Text('No data available');
         }
         return FutureBuilder(
           future: snapshot.data![itemId],
@@ -25,7 +27,7 @@ class NewsListTile extends StatelessWidget {
             if (!itemSnapshot.hasData) {
               return const LoadingContainer();
             }
-            return buildTile(context, itemSnapshot.data as ItemModel);
+            return buildTile(context, itemSnapshot.data!);
           },
         );
       },

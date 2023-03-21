@@ -23,7 +23,7 @@ class CommentsBloc {
   _commentsTransformer() {
     return ScanStreamTransformer<int, Map<int, Future<ItemModel>>>(
         (cache, int id, _) {
-      cache[id] = _repository.fetchItem(id) as Future<ItemModel>;
+      cache[id] = _repository.fetchItem(id).then((item) => item!);
       cache[id]!.then((ItemModel item) {
         for (var kidId in item.kids) {
           fetchItemWithComments(kidId);

@@ -32,6 +32,7 @@ class NewsList extends StatelessWidget {
             itemBuilder: (context, int index) {
               bloc.fetchItem(snapshot.data![index]);
 
+              print('${snapshot.data![index]} this is the index data value');
               return NewsListTile(
                 itemId: snapshot.data![index],
               );

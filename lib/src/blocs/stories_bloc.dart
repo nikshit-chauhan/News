@@ -11,7 +11,11 @@ class StoriesBloc {
 
   //Getters to get Streams
   Stream<List<int>> get topIds => _topIds.stream;
-  Stream<Map<int, Future<ItemModel>>> get items => _itemsOutput.stream;
+  Stream<Map<int, Future<ItemModel>>> get items {
+    print(_itemsOutput.hasValue);
+    print('this is streamOutput');
+    return _itemsOutput.stream;
+  }
 
   //Getters to sink
   Function(int) get fetchItem => _itemsFetcher.sink.add;
@@ -34,7 +38,7 @@ class StoriesBloc {
     return ScanStreamTransformer(
       (Map<int, Future<ItemModel>> cache, int id, int index) {
         print('fetching top story: $index');
-        cache[id] = _repository.fetchItem(id) as Future<ItemModel>;
+        cache[id] = _repository.fetchItem(id).then((item) => item!);
         return cache;
       },
       <int, Future<ItemModel>>{},

@@ -6,7 +6,7 @@ import '../widgets/loading_container.dart';
 class Comment extends StatelessWidget {
   final int itemId;
   final Map<int, Future<ItemModel>> itemMap;
-  late final int depth;
+  final int depth;
 
   Comment(
       {super.key,
@@ -41,7 +41,7 @@ class Comment extends StatelessWidget {
             Comment(
               itemId: kidId,
               itemMap: itemMap,
-              depth: depth++,
+              depth: depth + 1,
             ),
           );
         });
@@ -58,7 +58,9 @@ class Comment extends StatelessWidget {
         .replaceAll('&#x27;', "'")
         .replaceAll('&gt;', '>')
         .replaceAll('&lt;', '<')
-        .replaceAll('<p>', '\n\n');
+        .replaceAll('<p>', '\n\n')
+        .replaceAll('&#x2f', '/')
+        .replaceAll('&quot;', '"');
 
     return Text(text);
   }
