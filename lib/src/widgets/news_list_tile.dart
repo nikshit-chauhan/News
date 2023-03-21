@@ -6,44 +6,45 @@ import '../blocs/stories_provider.dart';
 class NewsListTile extends StatelessWidget {
   final int itemId;
 
-  NewsListTile({required this.itemId});
+  const NewsListTile({super.key, required this.itemId});
 
   @override
   Widget build(context) {
     final bloc = StoriesProvider.of(context);
 
-    return StreamBuilder(
+    return StreamBuilder<Map<int, Future<ItemModel>>>(
       stream: bloc.items,
-      builder: (context, AsyncSnapshot<Map<int, Future<ItemModel>>> snapshot) {
+      builder: (BuildContext context,
+          AsyncSnapshot<Map<int, Future<ItemModel>>> snapshot) {
         if (!snapshot.hasData) {
-          return LoadingContainer();
+          return const LoadingContainer();
         }
         return FutureBuilder(
           future: snapshot.data![itemId],
-          builder: (context, itemSnapshot) {
+          builder: (context, AsyncSnapshot<ItemModel> itemSnapshot) {
             if (!itemSnapshot.hasData) {
-              return LoadingContainer();
+              return const LoadingContainer();
             }
-            return buildTile(context, itemSnapshot.data);
+            return buildTile(context, itemSnapshot.data as ItemModel);
           },
         );
       },
     );
   }
 
-  Widget buildTile(BuildContext context, ItemModel? item) {
+  Widget buildTile(BuildContext context, ItemModel item) {
     return Column(
-      children: [
+      children: <Widget>[
         ListTile(
-          title: Text(item!.title),
+          title: Text(item.title),
           subtitle: Text('${item.score} points'),
           trailing: Column(
-            children: [
+            children: <Widget>[
               const Icon(Icons.comment),
               Text('${item.descendants}'),
             ],
           ),
-          onTap: (){
+          onTap: () {
             Navigator.pushNamed(context, '/${item.id}');
           },
         ),

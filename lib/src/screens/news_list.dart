@@ -5,7 +5,7 @@ import '../widgets/refresh.dart';
 
 class NewsList extends StatelessWidget {
   @override
-  Widget build (context) {
+  Widget build(context) {
     final bloc = StoriesProvider.of(context);
 
     return Scaffold(
@@ -15,11 +15,12 @@ class NewsList extends StatelessWidget {
       body: buildList(bloc),
     );
   }
-  Widget buildList(StoriesBloc bloc){
+
+  Widget buildList(StoriesBloc bloc) {
     return StreamBuilder(
       stream: bloc.topIds,
-      builder: (context, AsyncSnapshot<List<int>> snapshot){
-        if(!snapshot.hasData){
+      builder: (context, AsyncSnapshot<List<int>> snapshot) {
+        if (!snapshot.hasData) {
           return const Center(
             child: CircularProgressIndicator(),
           );
@@ -28,10 +29,12 @@ class NewsList extends StatelessWidget {
         return Refresh(
           child: ListView.builder(
             itemCount: snapshot.data!.length,
-            itemBuilder: (context, int index){
+            itemBuilder: (context, int index) {
               bloc.fetchItem(snapshot.data![index]);
 
-              return NewsListTile(itemId: snapshot.data![index]);
+              return NewsListTile(
+                itemId: snapshot.data![index],
+              );
             },
           ),
         );

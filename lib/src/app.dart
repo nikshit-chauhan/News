@@ -5,40 +5,44 @@ import 'screens/news_detail.dart';
 import 'blocs/comments_provider.dart';
 
 class App extends StatelessWidget {
+  const App({super.key});
+
   @override
   Widget build(context) {
     return CommentsProvider(
-        child: StoriesProvider(
-          child: MaterialApp(
-            title: 'News!',
-            onGenerateRoute: routes,
-          ),
+      child: StoriesProvider(
+        child: MaterialApp(
+          title: 'News!',
+          onGenerateRoute: routes,
         ),
+      ),
     );
   }
-  Route routes(RouteSettings settings){
-    if(settings.name == '/'){
+
+  Route routes(RouteSettings settings) {
+    if (settings.name == '/') {
       return MaterialPageRoute(
-          builder: (context) {
-            final storiesBloc = StoriesProvider.of(context);
+        builder: (context) {
+          final storiesBloc = StoriesProvider.of(context);
 
-            storiesBloc.fetchTopIds();
+          storiesBloc.fetchTopIds();
 
-            return NewsList();
-          });
-    }else{
+          return NewsList();
+        },
+      );
+    } else {
       return MaterialPageRoute(
-          builder: (context){
-            final commentsBloc = CommentsProvider.of(context);
-            final itemId = int.parse(settings.name!.replaceFirst('/', ''));
+        builder: (context) {
+          final commentsBloc = CommentsProvider.of(context);
+          final itemId = int.parse(settings.name!.replaceFirst('/', ''));
 
-            commentsBloc.fetchItemWithComments(itemId);
+          commentsBloc.fetchItemWithComments(itemId);
 
-            return NewsDetail(
-              itemId: itemId,
-            );
-      });
+          return NewsDetail(
+            itemId: itemId,
+          );
+        },
+      );
     }
-
   }
 }

@@ -7,7 +7,7 @@ import '../blocs/comments_provider.dart';
 class NewsDetail extends StatelessWidget {
   final int itemId;
 
-  NewsDetail({required this.itemId});
+  const NewsDetail({super.key, required this.itemId});
 
   @override
   Widget build(context) {
@@ -48,7 +48,9 @@ class NewsDetail extends StatelessWidget {
     children.add(buildTitle(item));
     final commentList = item?.kids.map((kidId) {
       return Comment(
-          itemId: kidId, itemMap: itemMap as Map<int, Future<ItemModel>>, depth: 0);
+          itemId: kidId,
+          itemMap: itemMap as Map<int, Future<ItemModel>>,
+          depth: 0);
     }).toList();
     children.addAll(commentList as Iterable<Widget>);
 

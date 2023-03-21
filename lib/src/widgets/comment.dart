@@ -8,22 +8,27 @@ class Comment extends StatelessWidget {
   final Map<int, Future<ItemModel>> itemMap;
   late final int depth;
 
-  Comment({required this.itemId, required this.itemMap, required this.depth});
+  Comment(
+      {super.key,
+      required this.itemId,
+      required this.itemMap,
+      required this.depth});
 
   @override
   Widget build(context) {
     return FutureBuilder(
       future: itemMap[itemId],
-      builder: (context, snapshot){
-        if(!snapshot.hasData){
-          return LoadingContainer();
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const LoadingContainer();
         }
 
         final item = snapshot.data;
         final children = <Widget>[
           ListTile(
-            title: buildText(item),
-            subtitle: item!.by == '' ? const Text("[Comment Deleted]") : Text(item.by),
+            title: buildText(item!),
+            subtitle:
+                item.by == '' ? const Text("[Comment Deleted]") : Text(item.by),
             contentPadding: EdgeInsets.only(
               right: 16.0,
               left: (depth + 1) * 16.0,
@@ -31,9 +36,13 @@ class Comment extends StatelessWidget {
           ),
           const Divider(),
         ];
-        snapshot.data?.kids.forEach((kidId){
+        item.kids.forEach((kidId) {
           children.add(
-            Comment(itemId: kidId, itemMap: itemMap, depth: depth++,),
+            Comment(
+              itemId: kidId,
+              itemMap: itemMap,
+              depth: depth++,
+            ),
           );
         });
 
@@ -42,14 +51,14 @@ class Comment extends StatelessWidget {
         );
       },
     );
-
   }
 
-  Widget buildText(ItemModel? item) {
-    final text = item!.text
+  Widget buildText(ItemModel item) {
+    final text = item.text
         .replaceAll('&#x27;', "'")
-        .replaceAll('<p>', '\n\n')
-        .replaceAll('</p>', '');
+        .replaceAll('&gt;', '>')
+        .replaceAll('&lt;', '<')
+        .replaceAll('<p>', '\n\n');
 
     return Text(text);
   }

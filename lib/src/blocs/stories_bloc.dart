@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 import '../models/item_model.dart';
 import '../resources/repository.dart';
@@ -20,18 +21,19 @@ class StoriesBloc {
     _itemsFetcher.stream.transform(_itemsTransformer()).pipe(_itemsOutput);
   }
 
-  fetchTopIds() async {
+  Future<void> fetchTopIds() async {
     final ids = await _repository.fetchTopIds();
     _topIds.sink.add(ids);
   }
 
-  clearCache() {
+  Future<void> clearCache() {
     return _repository.clearCache();
   }
 
   _itemsTransformer() {
     return ScanStreamTransformer(
-      (Map<int, Future<ItemModel>> cache, int id, _) {
+      (Map<int, Future<ItemModel>> cache, int id, int index) {
+        print('fetching top story: $index');
         cache[id] = _repository.fetchItem(id) as Future<ItemModel>;
         return cache;
       },

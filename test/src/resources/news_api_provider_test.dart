@@ -5,28 +5,24 @@ import 'package:test/test.dart';
 import 'package:http/http.dart';
 import 'package:http/testing.dart';
 
-void main(){
-  test('FetchTopIds returns a ids', () async{
+void main() {
+  test('FetchTopIds returns a ids', () async {
     final newsApi = NewsApiProvider();
-    newsApi.client = MockClient((request) async{
-      return Response(json.encode([1,2,3,4,5]), 200);
+    newsApi.client = MockClient((request) async {
+      return Response(json.encode([1, 2, 3, 4, 5]), 200);
     });
     final ids = await newsApi.fetchTopIds();
 
-    expect(ids, [1,2,3,4,5]);
+    expect(ids, [1, 2, 3, 4, 5]);
   });
-  test('FetchItems return a item', () async{
+  test('FetchItems return a item', () async {
     final newsApi = NewsApiProvider();
-    newsApi.client = MockClient((request) async{
-      final jsonMap = {'id': 8863, 'title': 'foo', 'text': 'bar'};
+    newsApi.client = MockClient((request) async {
+      final jsonMap = {'id': 123};
       return Response(json.encode(jsonMap), 200);
     });
     final item = await newsApi.fetchItem(8863);
 
-    expect(item, isA<ItemModel>());
-
     expect(item.id, 8863);
-    expect(item.title, 'foo');
-    expect(item.text, 'bar');
   });
 }

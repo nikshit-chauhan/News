@@ -13,14 +13,14 @@ class NewsDbProvider implements Source, Cache {
     init();
   }
 
-  init() async {
+  void init() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    final path = join(documentsDirectory.path, "items5.db");
+    final path = join(documentsDirectory.path, "items6.db");
     db = await openDatabase(
       path,
       version: 1,
       onCreate: (Database newDb, int version) {
-        newDb.execute("""
+        newDb.execute('''
           CREATE TABLE Items
             (
               id INTEGER PRIMARY KEY,
@@ -36,21 +36,20 @@ class NewsDbProvider implements Source, Cache {
               score INTEGER,
               title TEXT,
               descendants INTEGER
-            )
-        """);
+            );
+        ''');
       },
     );
   }
 
   @override
   Future<ItemModel?> fetchItem(int id) async {
-    final maps = await db.query(
+    List<Map<String, dynamic>> maps = await db.query(
       "Items",
       columns: null,
       where: "id = ?",
       whereArgs: [id],
     );
-
     if (maps.isNotEmpty) {
       return ItemModel.fromDb(maps.first);
     }
@@ -68,7 +67,8 @@ class NewsDbProvider implements Source, Cache {
 
   @override
   Future<List<int>> fetchTopIds() {
-    return Future(() => []);
+    // ignore: cast_from_null_always_fails
+    return null as Future<List<int>>;
   }
 
   @override
